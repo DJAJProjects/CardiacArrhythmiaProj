@@ -1,4 +1,4 @@
-package Controller;
+package Logic;
 
 import View.MainForm;
 
@@ -8,7 +8,10 @@ import View.MainForm;
 public class Main {
 
     public static void main(String[] args) {
+        SupervisedLearning sl = new SupervisedLearning();
+        sl.initialise();
         MainForm.main(args);
     }
+
 }
 

@@ -1,9 +1,9 @@
-package Controller;
+package Logic;
 
 /**
  * Created by Kuba on 16.04.2016.
  *
- * Kontroler do odpytywania sieci
+ * Manages neutral network polling
  */
 public class Polling {
 }
