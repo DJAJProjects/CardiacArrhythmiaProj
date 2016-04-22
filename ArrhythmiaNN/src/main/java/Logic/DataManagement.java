@@ -31,9 +31,12 @@ public class DataManagement {
     /**
      * Loads data from file with given path, processes it and returns as VersatileMLDataSet.
      */
-    public VersatileMLDataSet getDatSource(String path){
+    public VersatileMLDataSet getDataSource(String path){
+
+        // File with data
         File sourceFile = new File(path);
 
+        // Creates data source with data in comma separated value file (CSV)
         CSVDataSource dataSource = new CSVDataSource(sourceFile, false, CSVFormat.DECIMAL_POINT);
         VersatileMLDataSet dataSet = new VersatileMLDataSet(dataSource);
 
@@ -42,18 +45,17 @@ public class DataManagement {
         // For each column in data set
         for(int i = 0; i < columnsAmount; i++){
 
-            //Defining linear column
-            if( isNominalColumn(i)){
-                dataSet.defineSourceColumn("", i, ColumnType.continuous);
-            }
-            //Defining nominal column
-            else{
-                dataSet.defineSourceColumn("", i, ColumnType.nominal);
-            }
-
             //Defining output column
             if(i == outputColumnIndex){
                 outputColumn = dataSet.defineSourceColumn("arhythmia type", i, ColumnType.continuous);
+            }
+            //Defining linear column
+            else if( isNominalColumn(i)){
+                dataSet.defineSourceColumn("atribute " + Integer.toString(i), i, ColumnType.continuous);
+            }
+            //Defining nominal column
+            else{
+                dataSet.defineSourceColumn("atribute " + Integer.toString(i), i, ColumnType.continuous);
             }
         }
 
@@ -67,6 +69,12 @@ public class DataManagement {
         return dataSet;
     }
 
+
+    /**
+     * Determines whether given column index is connected with
+     * column with nominal values basing on predefined data about
+     * columns types.
+     */
     private  boolean isNominalColumn(int columnNum){
         for(int i = 0; i < nominalColumnsNumbers.length; i++){
             if(columnNum == i) return true;
