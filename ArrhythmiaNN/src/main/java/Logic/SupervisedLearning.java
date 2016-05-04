@@ -12,11 +12,12 @@ import org.encog.ml.model.EncogModel;
  */
 public class SupervisedLearning {
 
-    public void initialise(){
+    public void initialise(String path){
         DataManagement dm  = new DataManagement();
 
         // Loads prepared data set from given file.
-        VersatileMLDataSet dataSet = dm.getDataSource("data.txt");
+//        VersatileMLDataSet dataSet = dm.getDataSource("data.txt");
+        VersatileMLDataSet dataSet = dm.getDataSource(path);
 
         // Encog model allows to easily swap between different model types and automatically normalize data.
         EncogModel model = new EncogModel(dataSet);

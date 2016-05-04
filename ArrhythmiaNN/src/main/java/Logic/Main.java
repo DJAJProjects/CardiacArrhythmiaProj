@@ -1,6 +1,8 @@
 package Logic;
 
-import View.MainForm;
+import View.MainFrame;
+
+import java.awt.*;
 
 /**
  * Created by Kuba on 16.04.2016.
@@ -8,9 +10,12 @@ import View.MainForm;
 public class Main {
 
     public static void main(String[] args) {
-        SupervisedLearning sl = new SupervisedLearning();
-        sl.initialise();
-        MainForm.main(args);
+        final SupervisedLearning sl = new SupervisedLearning();
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainFrame(sl);
+            }
+        });
     }
 
 }
