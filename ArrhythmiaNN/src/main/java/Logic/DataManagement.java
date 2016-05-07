@@ -5,6 +5,8 @@ import org.encog.ml.data.versatile.sources.CSVDataSource;
 import org.encog.ml.data.versatile.columns.ColumnDefinition;
 import org.encog.ml.data.versatile.columns.ColumnType;
 import org.encog.ml.data.versatile.VersatileMLDataSet;
+import org.encog.ml.factory.MLMethodFactory;
+import org.encog.ml.model.EncogModel;
 import org.encog.util.csv.CSVFormat;
 
 import java.io.File;
