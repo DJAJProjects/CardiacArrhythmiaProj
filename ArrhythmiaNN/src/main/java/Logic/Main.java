@@ -11,6 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         final SupervisedLearning sl = new SupervisedLearning();
+        sl.initialise("data.txt");
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame(sl);
