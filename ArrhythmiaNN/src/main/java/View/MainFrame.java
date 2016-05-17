@@ -58,7 +58,7 @@ public class MainFrame extends JFrame{
         btnStart.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-                sl.initialise(path);				
+                sl.run(path);
 			}
 		});
         setVisible(true);
