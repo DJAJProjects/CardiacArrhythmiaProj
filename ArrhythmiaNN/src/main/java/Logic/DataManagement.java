@@ -10,6 +10,8 @@ import org.encog.ml.data.versatile.columns.ColumnType;
 import org.encog.ml.data.versatile.VersatileMLDataSet;
 import org.encog.ml.factory.MLMethodFactory;
 import org.encog.ml.model.EncogModel;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.csv.CSVFormat;
 
 import java.io.*;
@@ -33,10 +35,11 @@ public class DataManagement {
 
     private Integer[] consideredOutputs = new Integer[]{1,2,3,4,5,6,9,10,16};
 
-    private int outputColAmount;
-    private int inputColAmount = 279;
+    private int outputColAmount = 9;
+    private int inputColAmount =  279;
     private int columnsAmount;
-    private int firstOutputIndex = 280;
+    private int firstOutputIndex = 279;
+    private int rowsAmount;
 
     public  DataManagement(){
         outputColAmount = consideredOutputs.length;
@@ -67,7 +70,7 @@ public class DataManagement {
                     String outputLine = rearrangeOutputCSV(output);
                     String newLine = inputLine +"," + outputLine;
                     sb.append(newLine);
-                    sb.append(System.lineSeparator());
+                    sb.append("\n"/*System.lineSeparator()*/);
                 }
 
                 line = br.readLine();
@@ -84,6 +87,27 @@ public class DataManagement {
         }
     }
 
+    public int countRecords(String filePath) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        int count = 0;
+        while(br.readLine() != null)count++;
+        return count;
+    }
+
+    public boolean saveNeuralNetwork(String filePath, BasicNetwork network){
+        File file  = new File(filePath);
+        if(file == null) return false;
+        EncogDirectoryPersistence.saveObject(file, network);
+        return true;
+    }
+
+    public BasicNetwork loadNeuralNetwork(String filePath){
+        File file  = new File(filePath);
+        if(file == null) return null;
+        return (BasicNetwork)EncogDirectoryPersistence.loadObject(file);
+    }
+
+
     /**
      * Loads data from file with given path, processes it and returns as VersatileMLDataSet.
      */
@@ -93,12 +117,22 @@ public class DataManagement {
 
         File file = null;
 
+        file  = new File(path);
+        if(file == null) return null;
+
         try {
+            rowsAmount = countRecords(path);
+        }catch(Exception ex){
+            return null;
+        }
+
+
+       /* try {
             file = rearrangeFile(path, newFilePath);
             if(file == null)return null;
         }catch(Exception ex){
             return null;
-        }
+        }*/
 
         // Creates data source with data in comma separated value file (CSV)
         CSVDataSource dataSource = new CSVDataSource(file, false, CSVFormat.DECIMAL_POINT);
@@ -142,11 +176,11 @@ public class DataManagement {
 
         double[][] data = dataSet.getData();
 
-        input = new double[424][inputColAmount];
-        output = new double[424][outputColAmount];
+        input = new double[rowsAmount][inputColAmount];
+        output = new double[rowsAmount][outputColAmount];
 
         // Rewriting normalised input and output data to a simple 2D arrays
-        for(int row = 0; row < 424; row++){
+        for(int row = 0; row < rowsAmount; row++){
             for(int col = 0; col < inputColAmount; col++){
                 input[row][col] = data[row][col];
             }

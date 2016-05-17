@@ -24,15 +24,17 @@ import org.encog.neural.networks.training.propagation.back.Backpropagation;
 public class SupervisedLearning {
 
 
-    public void initialise(String path){
+    public BasicNetwork run(String path){
+
+        BasicNetwork network = null;
 
         DataManagement dm  = new DataManagement();
 
         // Loads prepared data set from given file.
         // VersatileMLDataSet dataSet = dm.getDataSource("data.txt");
-        BasicMLDataSet dataSet = dm.getBasicMLDataSet("data.txt");
+        BasicMLDataSet dataSet = dm.getBasicMLDataSet(path);
 
-        BasicNetwork network = new BasicNetwork();
+        network = new BasicNetwork();
         network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
         network.addLayer(new BasicLayer(new ActivationLOG(),true,400));
         network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
@@ -43,7 +45,7 @@ public class SupervisedLearning {
         // train the neural network
         final Propagation train = new Backpropagation(network, dataSet);
 
-        int epochsCount = 2000;
+        int epochsCount = 3000;
         int epoch = 0;
 
         do {
@@ -55,30 +57,7 @@ public class SupervisedLearning {
 
         train.finishTraining();
 
-        // test the neural network
-        System.out.println("Neural Network Results:");
-        for(MLDataPair pair: dataSet ) {
-            final MLData output = network.compute(pair.getInput());
-            System.out.println("ACTUAL OUTPUT: " + output.getData(0)
-                    + " " + output.getData(1)
-                    + " " + output.getData(2)
-                    + " " + output.getData(3)
-                    + " " + output.getData(4)
-                    + " " + output.getData(5)
-                    + " " + output.getData(6)
-                    + " " + output.getData(7)
-                    + " " + output.getData(8));
-            System.out.println(" IDEAL OUTPUT: " + pair.getIdeal().getData(0)
-                    + " " + pair.getIdeal().getData(1)
-                    + " " + pair.getIdeal().getData(2)
-                    + " " + pair.getIdeal().getData(3)
-                    + " " + pair.getIdeal().getData(4)
-                    + " " + pair.getIdeal().getData(5)
-                    + " " + pair.getIdeal().getData(6)
-                    + " " + pair.getIdeal().getData(7)
-                    + " " + pair.getIdeal().getData(8));
-        }
-        return;
+        return network;
 
     }
 }
