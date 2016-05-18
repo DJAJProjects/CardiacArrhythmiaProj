@@ -5,6 +5,9 @@ import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Kuba on 16.04.2016.
  *
@@ -12,7 +15,7 @@ import org.encog.neural.networks.BasicNetwork;
  */
 public class Polling {
 
-    public void run(BasicNetwork network, String pollingFilePath){
+    public List<Result> run(BasicNetwork network, String pollingFilePath){
 
         DataManagement dm  = new DataManagement();
 
@@ -22,8 +25,19 @@ public class Polling {
 
         // test the neural network
         System.out.println("Neural Network Results:");
-        for(MLDataPair pair: pollingDataSet ) {
-            final MLData output = network.compute(pair.getInput());
+
+        // Prepares list of results
+        List<Result> results = new ArrayList<Result>();
+
+        for(MLDataPair pollingRecord: pollingDataSet ) {
+            final MLData output = network.compute(pollingRecord.getInput());
+
+            Result res = new Result();
+            res.setIdeal(pollingRecord.getIdealArray());
+            res.setActual(output.getData());
+            results.add(res);
+
+            // -----------TEMPORARY------------
             System.out.println("ACTUAL OUTPUT: " + output.getData(0)
                     + " " + output.getData(1)
                     + " " + output.getData(2)
@@ -33,15 +47,17 @@ public class Polling {
                     + " " + output.getData(6)
                     + " " + output.getData(7)
                     + " " + output.getData(8));
-            System.out.println(" IDEAL OUTPUT: " + pair.getIdeal().getData(0)
-                    + " " + pair.getIdeal().getData(1)
-                    + " " + pair.getIdeal().getData(2)
-                    + " " + pair.getIdeal().getData(3)
-                    + " " + pair.getIdeal().getData(4)
-                    + " " + pair.getIdeal().getData(5)
-                    + " " + pair.getIdeal().getData(6)
-                    + " " + pair.getIdeal().getData(7)
-                    + " " + pair.getIdeal().getData(8));
+            System.out.println(" IDEAL OUTPUT: " + pollingRecord.getIdeal().getData(0)
+                    + " " + pollingRecord.getIdeal().getData(1)
+                    + " " + pollingRecord.getIdeal().getData(2)
+                    + " " + pollingRecord.getIdeal().getData(3)
+                    + " " + pollingRecord.getIdeal().getData(4)
+                    + " " + pollingRecord.getIdeal().getData(5)
+                    + " " + pollingRecord.getIdeal().getData(6)
+                    + " " + pollingRecord.getIdeal().getData(7)
+                    + " " + pollingRecord.getIdeal().getData(8));
+            //-----------------------------------
         }
+        return results;
     }
 }
