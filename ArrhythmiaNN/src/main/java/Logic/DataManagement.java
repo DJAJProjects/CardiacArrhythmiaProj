@@ -151,12 +151,12 @@ public class DataManagement {
             }
             //Defining linear column
             else if( isNominalColumn(i)){
-                ColumnDefinition inputCol = dataSet.defineSourceColumn("atribute " + Integer.toString(i), i, ColumnType.continuous);
+                ColumnDefinition inputCol = dataSet.defineSourceColumn("attribute " + Integer.toString(i), i, ColumnType.continuous);
                 dataSet.defineInput(inputCol);
             }
             //Defining nominal column
             else{
-                ColumnDefinition inputCol = dataSet.defineSourceColumn("atribute " + Integer.toString(i), i, ColumnType.continuous);
+                ColumnDefinition inputCol = dataSet.defineSourceColumn("attribute " + Integer.toString(i), i, ColumnType.continuous);
                 dataSet.defineInput(inputCol);
             }
         }

@@ -23,10 +23,32 @@ import org.encog.neural.networks.training.propagation.back.Backpropagation;
  */
 public class SupervisedLearning {
 
+    public SupervisedLearning(){
+        // Default layers settings
+        network = new BasicNetwork();
+        network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
+        network.addLayer(new BasicLayer(new ActivationLOG(), true,400));
+        network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
+        epochsCount = 3000;
+    }
+
+    private BasicNetwork network;
+
+    private int epochsCount;
+
+    public void setEpochsCount(int value){epochsCount = value;}
+
+    public void customizeHiddenLayers(int[] layers){
+        network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
+
+        for(int  i =0; i < layers.length; i++){
+            network.addLayer(new BasicLayer(new ActivationLOG(),true,layers[i]));
+        }
+
+        network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
+    }
 
     public BasicNetwork run(String path){
-
-        BasicNetwork network = null;
 
         DataManagement dm  = new DataManagement();
 
@@ -39,13 +61,13 @@ public class SupervisedLearning {
         network.addLayer(new BasicLayer(new ActivationLOG(),true,400));
         network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
         
+
         network.getStructure().finalizeStructure();
         network.reset();
         
         // train the neural network
         final Propagation train = new Backpropagation(network, dataSet);
 
-        int epochsCount = 3000;
         int epoch = 0;
 
         do {

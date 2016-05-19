@@ -18,12 +18,12 @@ import org.encog.neural.networks.BasicNetwork;
  */
 public class Polling {
 
-	public static String pollingFilePath = "pollingData.txt";
-	public static String networkFilePath = "network2.txt";
-	public ArrayList<OutputArrhythmiaData> arrhythmiaDataList;
+    public static String pollingFilePath = "pollingData.txt";
+    public static String networkFilePath = "network2.txt";
+    public ArrayList<OutputArrhythmiaData> arrhythmiaDataList;
 
-	public void run(){
-    	arrhythmiaDataList = new ArrayList<OutputArrhythmiaData>();
+    public void run(){
+        arrhythmiaDataList = new ArrayList<OutputArrhythmiaData>();
         DataManagement dm  = new DataManagement();
         BasicNetwork network = dm.loadNeuralNetwork(networkFilePath);
         // Loads prepared data set from given file.
@@ -56,10 +56,11 @@ public class Polling {
             ArrayList<Double> actualOutputs = new ArrayList<Double>();
             ArrayList<Double> idealOutputs = new ArrayList<Double>();
             for(int i =0 ; i<9;i++){
-            	actualOutputs.add(output.getData(i));
+
+                actualOutputs.add(output.getData(i));
             }
             for(int i =0 ; i<9;i++){
-            	idealOutputs.add(pair.getIdeal().getData(i));
+                idealOutputs.add(pair.getIdeal().getData(i));
             }
             arrhythmiaDataList.add(new OutputArrhythmiaData(actualOutputs, idealOutputs, j++));
         }
