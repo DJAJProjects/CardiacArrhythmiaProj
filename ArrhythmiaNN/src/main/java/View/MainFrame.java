@@ -24,7 +24,7 @@ public class MainFrame extends JFrame{
         springLayout.putConstraint(SpringLayout.EAST, tabbedPane, 0, SpringLayout.EAST, getContentPane());
     }
     void AddLearningPanel(){
-    	tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new LearningPanel());
+    	tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new JPanel());
     	learningLabel = new JLabel("Nauczanie", JLabel.CENTER);
         learningLabel.setPreferredSize(new Dimension(200, 30));
         tabbedPane.setTabComponentAt(1, learningLabel); 
@@ -39,7 +39,7 @@ public class MainFrame extends JFrame{
     public MainFrame(final SupervisedLearning sl, final Polling polling){
         setName("Typ arytmii");
         this.polling= polling;
-        setTitle("Rozpoznawanie typów arytmii serca");
+        setTitle("Rozpoznawanie typï¿½w arytmii serca");
         setMinimumSize(new Dimension(600, 300));
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
