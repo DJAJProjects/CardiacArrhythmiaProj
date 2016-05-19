@@ -24,11 +24,8 @@ public class MainFrame extends JFrame{
         springLayout.putConstraint(SpringLayout.EAST, tabbedPane, 0, SpringLayout.EAST, getContentPane());
     }
     void AddLearningPanel(){
-<<<<<<< HEAD
     	tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new LearningPanel(frame));
-=======
-    	tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new JPanel());
->>>>>>> origin/master
+    	//tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new JPanel());
     	learningLabel = new JLabel("Nauczanie", JLabel.CENTER);
         learningLabel.setPreferredSize(new Dimension(200, 30));
         tabbedPane.setTabComponentAt(1, learningLabel); 
