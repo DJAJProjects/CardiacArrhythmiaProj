@@ -19,9 +19,15 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import Logic.DataManagement;
 import Logic.OutputArrhythmiaData;
 import Logic.Polling;
 
+/**
+ * 
+ * @author Dominika B³asiak
+ *
+ */
 public class PollingPanel extends JPanel {
 	private JButton networkFileButton, pollingFileButton, resultFileButton;
 	private JButton startPollingButton;
@@ -139,14 +145,14 @@ public class PollingPanel extends JPanel {
 		SetButton(networkFileButton, labelChoose);
 
 		labelNetwork = new JLabel(
-				"Nie wybrano pliku z sieci¹. Domyœlnie zostanie za³adowany plik " + Polling.pollingFilePath);
+				"Nie wybrano pliku z sieci¹. Domyœlnie zostanie za³adowany plik " + DataManagement.pollingFilePath);
 		SetPathLabel(labelNetwork, networkFileButton);
 
 		pollingFileButton = new JButton("Dane do odpytywania");
 		SetButton(pollingFileButton, networkFileButton);
 
 		labelPolling = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domyœlnie zostanie za³adowany plik "
-				+ Polling.networkFilePath);
+				+ DataManagement.networkFilePath);
 		SetPathLabel(labelPolling, pollingFileButton);
 
 		resultFileButton = new JButton("Plik wynikowy");
@@ -173,12 +179,12 @@ public class PollingPanel extends JPanel {
 		SetOutputLabel(labelIdealOutput,scrollIdealOutputList);
 		networkFileButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelNetwork, Polling.networkFilePath);
+				ChangePath(labelNetwork, DataManagement.networkFilePath);
 			}
 		});
 		pollingFileButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelPolling, Polling.pollingFilePath);
+				ChangePath(labelPolling, DataManagement.pollingFilePath);
 			}
 		});
 		resultFileButton.addActionListener(new ActionListener() {

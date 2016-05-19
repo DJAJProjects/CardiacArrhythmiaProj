@@ -4,6 +4,9 @@ import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -16,27 +19,37 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
 
+import Logic.DataManagement;
 import Logic.OutputArrhythmiaData;
 import Logic.Polling;
+import Logic.SupervisedLearning;
 
-public class LearningPanel extends JPanel{
-	private JButton startLearningButton,addHiddenLayoutButton, networkFileButton, inputDataFileButton, iterationButton;
-	private JLabel labelConfiguration, labelHiddenLayout;
-	private JLabel labelNetwork, labelInputData;
+/**
+ * 
+ * @author Dominika B³asiak
+ *
+ */
+public class LearningPanel extends JPanel {
+	private JButton startLearningButton, addHiddenLayerButton, networkFileButton, inputDataFileButton;
+	private JLabel labelConfiguration, labelHiddenLayer;
+	private JLabel labelNetwork, labelInputData, labelAddHiddenLayer, labelIteration;
 	private SpringLayout springLayout;
 	private JProgressBar progressBar;
 	private FileDialog fileDialog;
 	private File file;
 	private JFrame mainFrame;
-	private JTextPane iterationText;
-	private JList<Integer> hiddenLayoutList;
-	private DefaultListModel<Integer> dflmHiddenLayoutList;
-	private JScrollPane scrollHiddenLayoutList;
-	
-	private void SetButton(JButton button, JComponent topCoomponent) {
+	private JTextField iterationText, neuronText;
+	private JList<Integer> hiddenLayerList;
+	private DefaultListModel<Integer> dflmHiddenLayerList;
+	private JScrollPane scrollHiddenLayerList;
+	private final SupervisedLearning learning;
+	private final LearningPanel learningPanel = this;
+
+	private void SetButton(JComponent button, JComponent topCoomponent) {
 		springLayout.putConstraint(SpringLayout.NORTH, button, 20, SpringLayout.SOUTH, topCoomponent);
 		springLayout.putConstraint(SpringLayout.SOUTH, button, 50, SpringLayout.SOUTH, topCoomponent);
 		springLayout.putConstraint(SpringLayout.WEST, button, 20, SpringLayout.WEST, this);
@@ -50,93 +63,157 @@ public class LearningPanel extends JPanel{
 		springLayout.putConstraint(SpringLayout.WEST, labelConfiguration, 20, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, labelConfiguration, 200, SpringLayout.WEST, this);
 	}
-	
-	private void SetPathLabel(JComponent component, JButton button) {
+
+	private void SetPathLabel(JComponent component, JButton button, int offset) {
 		springLayout.putConstraint(SpringLayout.NORTH, component, 0, SpringLayout.NORTH, button);
 		springLayout.putConstraint(SpringLayout.SOUTH, component, 0, SpringLayout.SOUTH, button);
-		springLayout.putConstraint(SpringLayout.WEST, component, 40, SpringLayout.EAST, button);
+		springLayout.putConstraint(SpringLayout.WEST, component, 40 + offset, SpringLayout.EAST, button);
 		springLayout.putConstraint(SpringLayout.EAST, component, -20, SpringLayout.EAST, this);
 		this.add(component);
 	}
-	
-	public void InitilizeHiddenLayoutList() {
-		hiddenLayoutList = new JList<Integer>();
-		scrollHiddenLayoutList = new JScrollPane(hiddenLayoutList);
-		dflmHiddenLayoutList = new DefaultListModel<Integer>();
-		springLayout.putConstraint(SpringLayout.NORTH, scrollHiddenLayoutList, 30, SpringLayout.SOUTH, startLearningButton);
-		springLayout.putConstraint(SpringLayout.SOUTH, scrollHiddenLayoutList, -100, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, scrollHiddenLayoutList, 30, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.EAST,scrollHiddenLayoutList, 200, SpringLayout.WEST, this);
-		this.add(scrollHiddenLayoutList);
+
+	public void InitilizeHiddenLayerList() {
+		hiddenLayerList = new JList<Integer>();
+		scrollHiddenLayerList = new JScrollPane(hiddenLayerList);
+		dflmHiddenLayerList = new DefaultListModel<Integer>();
+		springLayout.putConstraint(SpringLayout.NORTH, scrollHiddenLayerList, 30, SpringLayout.SOUTH,
+				startLearningButton);
+		springLayout.putConstraint(SpringLayout.SOUTH, scrollHiddenLayerList, -100, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, scrollHiddenLayerList, 30, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.EAST, scrollHiddenLayerList, 200, SpringLayout.WEST, this);
+		this.add(scrollHiddenLayerList);
 	}
-	
-	public void SetHiddenLayoutLabel(JLabel label, JScrollPane panel){
+
+	public void addNewHiddenLayer() {
+		try {
+			int count = Integer.parseInt(neuronText.getText());
+
+			if (count <= 0)
+				throw new NumberFormatException();
+			dflmHiddenLayerList.addElement(count);
+			hiddenLayerList.setModel(dflmHiddenLayerList);
+			neuronText.setText("");
+
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(null, "Podano niepoprawn¹ liczbê neuronów");
+		}
+
+	}
+
+	public void SetHiddenLayerLabel(JLabel label, JScrollPane panel) {
 		springLayout.putConstraint(SpringLayout.NORTH, label, 0, SpringLayout.SOUTH, startLearningButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, label, 0, SpringLayout.NORTH, panel);
 		springLayout.putConstraint(SpringLayout.WEST, label, 0, SpringLayout.WEST, panel);
 		this.add(label);
 	}
-	public LearningPanel(final JFrame frame){
+
+	void SetFieldText(JTextField field, JComponent button) {
+		springLayout.putConstraint(SpringLayout.NORTH, field, 0, SpringLayout.NORTH, button);
+		springLayout.putConstraint(SpringLayout.SOUTH, field, 0, SpringLayout.SOUTH, button);
+		springLayout.putConstraint(SpringLayout.WEST, field, 40, SpringLayout.EAST, button);
+		springLayout.putConstraint(SpringLayout.EAST, field, 150, SpringLayout.EAST, button);
+		this.add(field);
+	}
+
+	public LearningPanel(final JFrame frame, final SupervisedLearning learning) {
 		this.mainFrame = frame;
+		this.learning = learning;
 		springLayout = new SpringLayout();
 		this.setLayout(springLayout);
-		
+
 		labelConfiguration = new JLabel("Dane dotycz¹ce sieci: ");
 		SetTopLabel();
 		this.add(labelConfiguration);
-		
+
 		inputDataFileButton = new JButton("Plik z danymi wejœci.");
 		SetButton(inputDataFileButton, labelConfiguration);
-		
-		labelInputData = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domyœlnie zostanie za³adowany plik  "+ Polling.networkFilePath);
-		SetPathLabel(labelInputData, inputDataFileButton);
-		
+
+		labelInputData = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domyœlnie zostanie za³adowany plik  "
+				+ DataManagement.inputFilePath);
+		SetPathLabel(labelInputData, inputDataFileButton, 0);
+
 		networkFileButton = new JButton("Plik do zapisu sieci");
 		SetButton(networkFileButton, inputDataFileButton);
-		
-		labelNetwork = new JLabel("Nie wybrano pliku, gdzie zostanie zapisana sieæ. Domyœlnie bêdzie to plik "+ Polling.networkFilePath);
-		SetPathLabel(labelNetwork, networkFileButton);
-		
-		addHiddenLayoutButton = new JButton("Dodaj ukryt¹ warstwê");
-		SetButton(addHiddenLayoutButton, networkFileButton);
-		
-		iterationButton = new JButton("Zmieñ liczbê iteracji");
-		SetButton(iterationButton,addHiddenLayoutButton );
-		
-		iterationText = new JTextPane();
-		SetPathLabel(iterationText, iterationButton);
-	
+
+		labelNetwork = new JLabel("Nie wybrano pliku, gdzie zostanie zapisana sieæ. Domyœlnie bêdzie to plik "
+				+ DataManagement.networkFilePath);
+		SetPathLabel(labelNetwork, networkFileButton, 0);
+
+		addHiddenLayerButton = new JButton("Dodaj ukryt¹ warstwê");
+		SetButton(addHiddenLayerButton, networkFileButton);
+
+		neuronText = new JTextField();
+		SetFieldText(neuronText, addHiddenLayerButton);
+
+		labelIteration = new JLabel("Wpisz liczbê iteracji:", JLabel.CENTER);
+		SetButton(labelIteration, addHiddenLayerButton);
+
+		iterationText = new JTextField();
+		iterationText.setText(String.valueOf(learning.getEpochsCount()));
+		SetFieldText(iterationText, labelIteration);
+
 		startLearningButton = new JButton("Rozpocznij odpytywanie");
-		SetButton(startLearningButton, iterationButton);
-		
+		SetButton(startLearningButton, labelIteration);
+
 		progressBar = new JProgressBar();
 		springLayout.putConstraint(SpringLayout.NORTH, progressBar, -80, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -30, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, progressBar, 30, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, progressBar, -30, SpringLayout.EAST, this);
 		this.add(progressBar);
-		
-		InitilizeHiddenLayoutList();
-		labelHiddenLayout = new JLabel("Ukryte warstwy: ");
-		SetHiddenLayoutLabel(labelHiddenLayout,scrollHiddenLayoutList);
-		
+
+		labelAddHiddenLayer = new JLabel("Wpisz iloœæ neuronów do pola i kliknij przycisk dodaj ukryt¹ warstwê");
+		SetPathLabel(labelAddHiddenLayer, addHiddenLayerButton, 150);
+
+		InitilizeHiddenLayerList();
+		labelHiddenLayer = new JLabel("Ukryte warstwy: ");
+		SetHiddenLayerLabel(labelHiddenLayer, scrollHiddenLayerList);
+
 		inputDataFileButton.addActionListener(new ActionListener() {
-			//TODO odkomentowac
 			public void actionPerformed(ActionEvent e) {
-				//ChangePath(, path);
-				
-			}
-		});
-		
-		networkFileButton.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelNetwork, Polling.networkFilePath);
+				ChangePath(labelInputData, DataManagement.inputFilePath);
+
 			}
 		});
 
+		networkFileButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				ChangePath(labelNetwork, DataManagement.networkFilePath);
+			}
+		});
+		addHiddenLayerButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				addNewHiddenLayer();
+			}
+		});
+
+		startLearningButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int count = Integer.parseInt(iterationText.getText());
+
+					if (count <= 0)
+						throw new NumberFormatException();
+					learning.setEpochsCount(count);
+					progressBar.setValue(5);
+					progressBar.setMaximum(count);
+					int tab[] = new int[dflmHiddenLayerList.size()];;
+					for(int i =0 ; i<dflmHiddenLayerList.size();i++){
+						tab[0] = dflmHiddenLayerList.getElementAt(i).intValue();
+					}
+					learning.customizeHiddenLayers(tab);
+					startLearningButton.setEnabled(false);
+					learning.run(learningPanel);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Podano niepoprawn¹ liczbê iteracji");
+				}
+			}
+		});
 	}
-	
+
 	void ChangePath(JLabel label, String path) {
 		fileDialog = new FileDialog(mainFrame, "Wybierz zbiór danych do odpytywania", FileDialog.LOAD);
 		fileDialog.setVisible(true);
@@ -145,5 +222,21 @@ public class LearningPanel extends JPanel{
 			label.setText(path = file.getAbsolutePath());
 		} else
 			JOptionPane.showMessageDialog(null, "Wybrano niepoprawn¹ œcie¿kê");
+	}
+	private int epoch;
+	public void RefreshProgressBar(final int epoch) {
+		this.epoch= epoch;
+		new Thread(new Runnable() {
+			
+			public void run() {
+				progressBar.setValue(epoch);
+				mainFrame.repaint();
+				progressBar.repaint();
+				
+			}
+		}).start();		
+	}
+	public void EnabledButton(){
+		startLearningButton.setEnabled(true);
 	}
 }

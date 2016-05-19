@@ -23,7 +23,9 @@ import java.util.List;
  */
 public class DataManagement {
 
-
+	public static String pollingFilePath = "pollingData.txt";
+    public static String networkFilePath = "network2.txt";
+    public static String inputFilePath = "learningData.txt";
     private double[][] input;
     private double[][] output;
 

@@ -5,18 +5,19 @@ import Logic.SupervisedLearning;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
+/**
+ * 
+ * @author Dominika B³asiak
+ *
+ */
 public class MainFrame extends JFrame{
     public final JFrame frame = this;
-    private JTabbedPane learningPanel, pollingPanel;
     private SpringLayout springLayout;
     private  JTabbedPane tabbedPane;
     private JLabel learningLabel, pollingLabel;
     private final Polling polling;
+	private final SupervisedLearning learning;
+	
     void SetPositionTabbelPane(){
     	springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 0, SpringLayout.NORTH, getContentPane());
         springLayout.putConstraint(SpringLayout.WEST, tabbedPane, 0, SpringLayout.WEST, getContentPane());
@@ -24,8 +25,7 @@ public class MainFrame extends JFrame{
         springLayout.putConstraint(SpringLayout.EAST, tabbedPane, 0, SpringLayout.EAST, getContentPane());
     }
     void AddLearningPanel(){
-    	tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new LearningPanel(frame));
-    	//tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new JPanel());
+    	tabbedPane.addTab("",new ImageIcon("icon\\ico_2"), new LearningPanel(frame, learning));
     	learningLabel = new JLabel("Nauczanie", JLabel.CENTER);
         learningLabel.setPreferredSize(new Dimension(200, 30));
         tabbedPane.setTabComponentAt(1, learningLabel); 
@@ -40,6 +40,7 @@ public class MainFrame extends JFrame{
     public MainFrame(final SupervisedLearning sl, final Polling polling){
         setName("Typ arytmii");
         this.polling= polling;
+        this.learning = sl;
         setTitle("Rozpoznawanie typï¿½w arytmii serca");
         setMinimumSize(new Dimension(600, 300));
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);

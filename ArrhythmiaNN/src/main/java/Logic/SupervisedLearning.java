@@ -1,5 +1,7 @@
 package Logic;
 
+import javax.swing.JFrame;
+
 import org.encog.ConsoleStatusReportable;
 import org.encog.engine.network.activation.*;
 import org.encog.ml.MLRegression;
@@ -15,6 +17,9 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.Propagation;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+
+import View.LearningPanel;
+import View.MainFrame;
 
 /**
  * Created by Kuba on 16.04.2016.
@@ -48,13 +53,13 @@ public class SupervisedLearning {
         network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
     }
 
-    public BasicNetwork run(String path){
+    public BasicNetwork run(final LearningPanel learningPanel){
 
         DataManagement dm  = new DataManagement();
 
         // Loads prepared data set from given file.
         // VersatileMLDataSet dataSet = dm.getDataSource("data.txt");
-        BasicMLDataSet dataSet = dm.getBasicMLDataSet(path);
+        BasicMLDataSet dataSet = dm.getBasicMLDataSet(DataManagement.inputFilePath);
 
         network = new BasicNetwork();
         network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
@@ -68,18 +73,34 @@ public class SupervisedLearning {
         // train the neural network
         final Propagation train = new Backpropagation(network, dataSet);
 
-        int epoch = 0;
-
-        do {
-            train.iteration();
-            if(epoch%10 == 0)
-                System.out.println("Epoch #" + epoch + " Error:" + train.getError());
-            epoch++;
-        } while((epoch < epochsCount));
+       
+        new Thread(new Runnable() {
+			
+			public void run() {
+				 int epoch = 1;
+				do {
+		            train.iteration();
+		            if(epoch%10 == 0){
+		                System.out.println("Epoch #" + epoch + " Error:" + train.getError());
+		                learningPanel.RefreshProgressBar(epoch);
+		            }
+		                epoch++;
+		           
+		        } while((epoch <= epochsCount));
+				learningPanel.EnabledButton();
+			}
+		}).start();
+        
 
         train.finishTraining();
 
         return network;
 
     }
+
+	public int getEpochsCount() {
+		return epochsCount;
+	}
+    
+    
 }

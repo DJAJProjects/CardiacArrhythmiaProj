@@ -18,17 +18,15 @@ import org.encog.neural.networks.BasicNetwork;
  */
 public class Polling {
 
-    public static String pollingFilePath = "pollingData.txt";
-    public static String networkFilePath = "network2.txt";
     public ArrayList<OutputArrhythmiaData> arrhythmiaDataList;
 
     public void run(){
         arrhythmiaDataList = new ArrayList<OutputArrhythmiaData>();
         DataManagement dm  = new DataManagement();
-        BasicNetwork network = dm.loadNeuralNetwork(networkFilePath);
+        BasicNetwork network = dm.loadNeuralNetwork(DataManagement.networkFilePath);
         // Loads prepared data set from given file.
         // VersatileMLDataSet dataSet = dm.getDataSource("data.txt");
-        BasicMLDataSet pollingDataSet = dm.getBasicMLDataSet(pollingFilePath);
+        BasicMLDataSet pollingDataSet = dm.getBasicMLDataSet(DataManagement.pollingFilePath);
 
         // test the neural network
         System.out.println("Neural Network Results:");
