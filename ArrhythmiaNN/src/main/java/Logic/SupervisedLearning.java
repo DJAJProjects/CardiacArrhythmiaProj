@@ -38,10 +38,10 @@ public class SupervisedLearning {
         network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
         network.addLayer(new BasicLayer(new ActivationLOG(),true,400));
         network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
-
+        
         network.getStructure().finalizeStructure();
         network.reset();
-
+        
         // train the neural network
         final Propagation train = new Backpropagation(network, dataSet);
 
