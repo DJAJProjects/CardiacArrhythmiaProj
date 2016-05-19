@@ -38,6 +38,7 @@ public class PollingPanel extends JPanel {
 	private final JFrame mainFrame;
 	private final Polling polling;
 	private JLabel labelOutput, labelActualOutput, labelIdealOutput;
+	
 	private void SetButton(JButton button, JComponent topCoomponent) {
 		springLayout.putConstraint(SpringLayout.NORTH, button, 20, SpringLayout.SOUTH, topCoomponent);
 		springLayout.putConstraint(SpringLayout.SOUTH, button, 50, SpringLayout.SOUTH, topCoomponent);
@@ -69,8 +70,7 @@ public class PollingPanel extends JPanel {
 		}
 		actualOutputList.setModel(dflmActualOutputList);
 	}
-	public void InitilizeActualOutputList() {
-		
+	public void InitilizeActualOutputList() {	
 		actualOutputList = new JList<Double>();
 		dflmActualOutputList = new DefaultListModel<Double>();
 		scrollActualOutputList = new JScrollPane(actualOutputList);
