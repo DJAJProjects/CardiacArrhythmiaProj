@@ -26,6 +26,7 @@ public class DataManagement {
 	public static String pollingFilePath = "pollingData.txt";
     public static String networkFilePath = "network2.txt";
     public static String inputFilePath = "learningData.txt";
+    public static String resultFilePath = "result.txt";
     private double[][] input;
     private double[][] output;
 
@@ -105,7 +106,6 @@ public class DataManagement {
 
     public BasicNetwork loadNeuralNetwork(String filePath){
         File file  = new File(filePath);
-        System.out.println("ścieżka: " +filePath);
         if(file == null) return null;
         return (BasicNetwork)EncogDirectoryPersistence.loadObject(file);
     }

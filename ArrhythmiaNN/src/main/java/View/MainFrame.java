@@ -53,7 +53,6 @@ public class MainFrame extends JFrame{
         AddPollingPanel();
         AddLearningPanel();
         getContentPane().add(tabbedPane);
-
         pack();
         setVisible(true);
     }

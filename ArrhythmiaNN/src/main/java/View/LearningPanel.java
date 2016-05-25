@@ -49,6 +49,7 @@ public class LearningPanel extends JPanel {
 	private final SupervisedLearning learning;
 	private final LearningPanel learningPanel = this;
 
+
 	private void SetButton(JComponent button, JComponent topCoomponent) {
 		springLayout.putConstraint(SpringLayout.NORTH, button, 20, SpringLayout.SOUTH, topCoomponent);
 		springLayout.putConstraint(SpringLayout.SOUTH, button, 50, SpringLayout.SOUTH, topCoomponent);
@@ -155,9 +156,7 @@ public class LearningPanel extends JPanel {
 		startLearningButton = new JButton("Rozpocznij odpytywanie");
 		SetButton(startLearningButton, labelIteration);
 
-//		lblIterator = new JLabel("Iteracja: ");
-//		SetPathLabel(lblIterator,hiddenLayerList,0);
-//		lblError = new JLabel("Błąd: ");
+
 		progressBar = new JProgressBar();
 		springLayout.putConstraint(SpringLayout.NORTH, progressBar, -80, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -30, SpringLayout.SOUTH, this);
@@ -172,9 +171,23 @@ public class LearningPanel extends JPanel {
 		labelHiddenLayer = new JLabel("Ukryte warstwy: ");
 		SetHiddenLayerLabel(labelHiddenLayer, scrollHiddenLayerList);
 
+		lblIterator = new JLabel("Iteracja: ");
+		springLayout.putConstraint(SpringLayout.NORTH, lblIterator, 40, SpringLayout.SOUTH, startLearningButton);
+		springLayout.putConstraint(SpringLayout.SOUTH, lblIterator, 60, SpringLayout.SOUTH, startLearningButton);
+		springLayout.putConstraint(SpringLayout.WEST, lblIterator, 30, SpringLayout.EAST, scrollHiddenLayerList);
+		springLayout.putConstraint(SpringLayout.EAST, lblIterator, 0, SpringLayout.EAST, this);
+		this.add(lblIterator);
+
+		lblError = new JLabel("Błąd: ");
+		springLayout.putConstraint(SpringLayout.NORTH, lblError, 20, SpringLayout.SOUTH, lblIterator);
+		springLayout.putConstraint(SpringLayout.SOUTH, lblError, 40, SpringLayout.SOUTH, lblIterator);
+		springLayout.putConstraint(SpringLayout.WEST, lblError, 30, SpringLayout.EAST, scrollHiddenLayerList);
+		springLayout.putConstraint(SpringLayout.EAST, lblError, 0, SpringLayout.EAST, this);
+		this.add(lblError);
+
 		inputDataFileButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelInputData, DataManagement.inputFilePath);
+				DataManagement.inputFilePath = ChangePath(labelInputData, DataManagement.inputFilePath);
 
 			}
 		});
@@ -182,7 +195,7 @@ public class LearningPanel extends JPanel {
 		networkFileButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelNetwork, DataManagement.networkFilePath);
+				DataManagement.networkFilePath = ChangePath(labelNetwork, DataManagement.networkFilePath);
 			}
 		});
 		addHiddenLayerButton.addActionListener(new ActionListener() {
@@ -218,7 +231,7 @@ public class LearningPanel extends JPanel {
 		});
 	}
 
-	void ChangePath(JLabel label, String path) {
+	String ChangePath(JLabel label, String path) {
 		fileDialog = new FileDialog(mainFrame, "Wybierz zbiór danych do odpytywania", FileDialog.LOAD);
 		fileDialog.setVisible(true);
 		file = new File(fileDialog.getDirectory() + fileDialog.getFile());
@@ -226,13 +239,14 @@ public class LearningPanel extends JPanel {
 			label.setText(path = file.getAbsolutePath());
 		} else
 			JOptionPane.showMessageDialog(null, "Wybrano niepoprawną ścieżkę");
+		return path;
 	}
-	private int epoch;
-	public void RefreshProgressBar(final int epoch) {
-		this.epoch= epoch;
+	public void RefreshProgressBar(final int epoch, final double error) {
 		new Thread(new Runnable() {
 			
 			public void run() {
+				lblIterator.setText("Iteracja: " +epoch);
+				lblError.setText("Błąd: " + error);
 				progressBar.setValue(epoch);
 				mainFrame.repaint();
 				progressBar.repaint();

@@ -81,7 +81,7 @@ public class SupervisedLearning {
 		            train.iteration();
 		            if(epoch%10 == 0){
 		                System.out.println("Epoch #" + epoch + " Error:" + train.getError());
-		                learningPanel.RefreshProgressBar(epoch);
+		                learningPanel.RefreshProgressBar(epoch, train.getError());
 		            }
 		                epoch++;
 		           

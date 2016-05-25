@@ -33,7 +33,7 @@ public class PollingPanel extends JPanel {
 	private JButton startPollingButton;
 	private SpringLayout springLayout;
 	private JLabel labelChoose, labelNetwork, labelPolling, labelResultFile;
-	private String resultPath = "result.txt";
+	//private String resultPath = "result.txt";
 	private FileDialog fileDialog;
 	private File file;
 	private JList<OutputArrhythmiaData> outputList;
@@ -190,7 +190,7 @@ public class PollingPanel extends JPanel {
 		resultFileButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				resultPath = ChangePath(labelResultFile, resultPath);
+				DataManagement.resultFilePath = ChangePath(labelResultFile, DataManagement.resultFilePath);
 
 			}
 		});
