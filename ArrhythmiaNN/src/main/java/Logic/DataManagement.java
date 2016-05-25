@@ -24,7 +24,7 @@ import java.util.List;
 public class DataManagement {
 
 	public static String pollingFilePath = "pollingData.txt";
-    public static String networkFilePath = "network2.txt";
+    public static String networkFilePath = "network5.txt";
     public static String inputFilePath = "learningData.txt";
     public static String resultFilePath = "result.txt";
     public static String[] outputNames= {"Wyniki w normie",

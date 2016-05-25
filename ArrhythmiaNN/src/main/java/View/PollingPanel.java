@@ -39,9 +39,11 @@ public class PollingPanel extends JPanel {
 	private FileDialog fileDialog;
 	private File file;
 	private JList<OutputArrhythmiaData> outputList;
-	private JList<Double> idealOutputList, actualOutputList;
+	private JList<String> idealOutputList;
+	private JList<Double> actualOutputList;
 	private DefaultListModel<OutputArrhythmiaData> dflmOutputList;
-	private DefaultListModel<Double> dflmIdealOutputList, dflmActualOutputList;
+	private DefaultListModel<String> dflmIdealOutputList;
+	private DefaultListModel<Double> dflmActualOutputList;
 	private JScrollPane scrollOutputList, scrollActualOutputList, scrollIdealOutputList;
 	private final JFrame mainFrame;
 	private final Polling polling;
@@ -71,12 +73,14 @@ public class PollingPanel extends JPanel {
 	}
 
 	public void SetSelectedActualOutput(){
-		dflmActualOutputList.clear();
-		OutputArrhythmiaData data = outputList.getSelectedValue();
-		for (int i = 0; i < data.actualOutput.size(); i++) {
-			dflmActualOutputList.addElement(data.actualOutput.get(i));
+		if(outputList.getSelectedValue()!=null) {
+			dflmActualOutputList.clear();
+			OutputArrhythmiaData data = outputList.getSelectedValue();
+			for (int i = 0; i < data.actualOutput.size(); i++) {
+				dflmActualOutputList.addElement(data.actualOutput.get(i));
+			}
+			actualOutputList.setModel(dflmActualOutputList);
 		}
-		actualOutputList.setModel(dflmActualOutputList);
 	}
 	public void InitilizeActualOutputList() {	
 		actualOutputList = new JList<Double>();
@@ -85,21 +89,23 @@ public class PollingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.NORTH, scrollActualOutputList, 30, SpringLayout.SOUTH, startPollingButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, scrollActualOutputList, -30, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, scrollActualOutputList, 30, SpringLayout.EAST, scrollOutputList);
-		springLayout.putConstraint(SpringLayout.EAST, scrollActualOutputList, 250, SpringLayout.EAST, scrollOutputList);
+		springLayout.putConstraint(SpringLayout.EAST, scrollActualOutputList, 200, SpringLayout.EAST, scrollOutputList);
 		this.add(scrollActualOutputList);
 	}
 
 	public void SetSelectedIdealOutput(){
-		dflmIdealOutputList.clear();
-		OutputArrhythmiaData data = outputList.getSelectedValue();
-		for (int i = 0; i < data.idealOutput.size(); i++) {
-			dflmIdealOutputList.addElement(data.idealOutput.get(i)/*+", "+DataManagement.outputNames[i]*/);
+		if(outputList.getSelectedValue()!=null) {
+			dflmIdealOutputList.clear();
+			OutputArrhythmiaData data = outputList.getSelectedValue();
+			for (int i = 0; i < data.idealOutput.size(); i++) {
+				dflmIdealOutputList.addElement(data.idealOutput.get(i).toString() + ", " + DataManagement.outputNames[i]);
+			}
+			idealOutputList.setModel(dflmIdealOutputList);
 		}
-		idealOutputList.setModel(dflmIdealOutputList);
 	}
 	public void InitilizeIdealOutputList() {
-		idealOutputList = new JList<Double>();
-		dflmIdealOutputList = new DefaultListModel<Double>();
+		idealOutputList = new JList<String>();
+		dflmIdealOutputList = new DefaultListModel<String>();
 		scrollIdealOutputList = new JScrollPane(idealOutputList);
 		springLayout.putConstraint(SpringLayout.NORTH, scrollIdealOutputList, 30, SpringLayout.SOUTH, startPollingButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, scrollIdealOutputList, -30, SpringLayout.SOUTH, this);
@@ -213,7 +219,10 @@ public class PollingPanel extends JPanel {
 		});
 		startPollingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dflmActualOutputList.clear();
+				dflmIdealOutputList.clear();
 				polling.run();
+
 				labelProper.setText("Liczba poprawnych: "+polling.proper);
 				labelWrong.setText("Liczba niepoprawnych: "+polling.bad);
 				SetOutputDataList();

@@ -70,11 +70,17 @@ public class Polling {
                 if(pair.getIdeal().getData(i) == 1)idealProperIndex = i;
                 idealOutputs.add(pair.getIdeal().getData(i));
             }
-
-            if(actualProperIndex == idealProperIndex)proper++;
-            else bad++;
+            boolean correct;
+            if(actualProperIndex == idealProperIndex) {
+                proper++;
+                correct = true;
+            }
+            else {
+                bad++;
+                correct = false;
+            }
             
-            arrhythmiaDataList.add(new OutputArrhythmiaData(actualOutputs, idealOutputs, j++));
+            arrhythmiaDataList.add(new OutputArrhythmiaData(actualOutputs, idealOutputs, j++, correct));
         }
     }
 }
