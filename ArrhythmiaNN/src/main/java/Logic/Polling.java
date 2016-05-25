@@ -59,11 +59,11 @@ public class Polling {
             ArrayList<Double> actualOutputs = new ArrayList<Double>();
             ArrayList<Double> idealOutputs = new ArrayList<Double>();
             int idealProperIndex = 0;
-            int actualMaxValue = -1;
+            double actualMaxValue = -1;
             int actualProperIndex = 0;
 
             for(int i =0 ; i<9;i++){
-                if(output.getData(i) > actualMaxValue)actualProperIndex = i;
+                if(output.getData(i) > actualMaxValue){actualMaxValue = output.getData(i); actualProperIndex = i;}
                 actualOutputs.add(output.getData(i));
             }
             for(int i =0 ; i<9;i++){
