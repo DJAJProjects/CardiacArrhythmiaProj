@@ -4,6 +4,8 @@ import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -32,7 +34,7 @@ public class PollingPanel extends JPanel {
 	private JButton networkFileButton, pollingFileButton, resultFileButton;
 	private JButton startPollingButton;
 	private SpringLayout springLayout;
-	private JLabel labelChoose, labelNetwork, labelPolling, labelResultFile;
+	private JLabel labelChoose, labelNetwork, labelPolling, labelResultFile, labelProper, labelWrong;
 	//private String resultPath = "result.txt";
 	private FileDialog fileDialog;
 	private File file;
@@ -83,7 +85,7 @@ public class PollingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.NORTH, scrollActualOutputList, 30, SpringLayout.SOUTH, startPollingButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, scrollActualOutputList, -30, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, scrollActualOutputList, 30, SpringLayout.EAST, scrollOutputList);
-		springLayout.putConstraint(SpringLayout.EAST, scrollActualOutputList, -250, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.EAST, scrollActualOutputList, 250, SpringLayout.EAST, scrollOutputList);
 		this.add(scrollActualOutputList);
 	}
 
@@ -91,7 +93,7 @@ public class PollingPanel extends JPanel {
 		dflmIdealOutputList.clear();
 		OutputArrhythmiaData data = outputList.getSelectedValue();
 		for (int i = 0; i < data.idealOutput.size(); i++) {
-			dflmIdealOutputList.addElement(data.idealOutput.get(i));
+			dflmIdealOutputList.addElement(data.idealOutput.get(i)/*+", "+DataManagement.outputNames[i]*/);
 		}
 		idealOutputList.setModel(dflmIdealOutputList);
 	}
@@ -102,7 +104,7 @@ public class PollingPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.NORTH, scrollIdealOutputList, 30, SpringLayout.SOUTH, startPollingButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, scrollIdealOutputList, -30, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, scrollIdealOutputList, 30, SpringLayout.EAST, scrollActualOutputList);
-		springLayout.putConstraint(SpringLayout.EAST, scrollIdealOutputList, -30, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.EAST, scrollIdealOutputList, -400, SpringLayout.EAST, this);
 		this.add(scrollIdealOutputList);
 	}
 
@@ -113,7 +115,7 @@ public class PollingPanel extends JPanel {
 		}
 		outputList.setModel(dflmOutputList);
 	}
-	
+
 	public void SetOutputLabel(JLabel label, JScrollPane output){
 		springLayout.putConstraint(SpringLayout.NORTH, label, 0, SpringLayout.SOUTH, startPollingButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, label, 0, SpringLayout.NORTH, output);
@@ -177,6 +179,21 @@ public class PollingPanel extends JPanel {
 		
 		labelIdealOutput = new JLabel("Idealne dane: ");
 		SetOutputLabel(labelIdealOutput,scrollIdealOutputList);
+
+		labelProper = new JLabel("Liczba poprawnych: ");
+		springLayout.putConstraint(SpringLayout.NORTH, labelProper, 30, SpringLayout.SOUTH, startPollingButton);
+		springLayout.putConstraint(SpringLayout.SOUTH, labelProper, 50, SpringLayout.SOUTH, startPollingButton);
+		springLayout.putConstraint(SpringLayout.WEST, labelProper, 30, SpringLayout.EAST, scrollIdealOutputList);
+//		springLayout.putConstraint(SpringLayout.EAST, labelProper, -400, SpringLayout.EAST, this);
+		this.add(labelProper);
+
+		labelWrong = new JLabel("Liczba niepoprawnych: ");
+		springLayout.putConstraint(SpringLayout.NORTH, labelWrong, 20, SpringLayout.SOUTH, labelProper);
+		springLayout.putConstraint(SpringLayout.SOUTH, labelWrong, 50, SpringLayout.SOUTH, labelProper);
+		springLayout.putConstraint(SpringLayout.WEST, labelWrong, 30, SpringLayout.EAST, scrollIdealOutputList);
+//		springLayout.putConstraint(SpringLayout.EAST, labelProper, -400, SpringLayout.EAST, this);
+		this.add(labelWrong);
+
 		networkFileButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DataManagement.networkFilePath = ChangePath(labelNetwork, DataManagement.networkFilePath);
@@ -197,7 +214,10 @@ public class PollingPanel extends JPanel {
 		startPollingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				polling.run();
+				labelProper.setText("Liczba poprawnych: "+polling.proper);
+				labelWrong.setText("Liczba niepoprawnych: "+polling.bad);
 				SetOutputDataList();
+				saveResult();
 			}
 		});
 		outputList.addListSelectionListener(new ListSelectionListener() {
@@ -220,5 +240,24 @@ public class PollingPanel extends JPanel {
 		} else
 			JOptionPane.showMessageDialog(null, "Wybrano niepoprawną ścieżkę");
 		return path;
+	}
+
+	public void saveResult(){
+		PrintWriter zapis = null;
+		try {
+			zapis = new PrintWriter(DataManagement.resultFilePath);
+			for(int i = 0;  i < polling.arrhythmiaDataList.size(); i++) {
+				zapis.println("Zestaw: " + i);
+				for(int j =0 ; j< polling.arrhythmiaDataList.get(i).actualOutput.size();j++)
+					zapis.print(polling.arrhythmiaDataList.get(i).actualOutput.get(j) +" ");
+				zapis.println();
+				for(int j =0 ; j< polling.arrhythmiaDataList.get(i).idealOutput.size();j++)
+					zapis.print(polling.arrhythmiaDataList.get(i).idealOutput.get(j)+" ");
+				zapis.println();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		zapis.close();
 	}
 }
