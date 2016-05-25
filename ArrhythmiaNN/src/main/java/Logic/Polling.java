@@ -20,7 +20,11 @@ public class Polling {
 
     public ArrayList<OutputArrhythmiaData> arrhythmiaDataList;
 
+    public int proper = 0;
+    public int bad = 0;
+
     public void run(){
+        proper = bad = 0;
         arrhythmiaDataList = new ArrayList<OutputArrhythmiaData>();
         DataManagement dm  = new DataManagement();
         System.out.println(DataManagement.pollingFilePath);
@@ -54,13 +58,22 @@ public class Polling {
                     + " " + pair.getIdeal().getData(8));
             ArrayList<Double> actualOutputs = new ArrayList<Double>();
             ArrayList<Double> idealOutputs = new ArrayList<Double>();
-            for(int i =0 ; i<9;i++){
+            int idealProperIndex = 0;
+            int actualMaxValue = -1;
+            int actualProperIndex = 0;
 
+            for(int i =0 ; i<9;i++){
+                if(output.getData(i) > actualMaxValue)actualProperIndex = i;
                 actualOutputs.add(output.getData(i));
             }
             for(int i =0 ; i<9;i++){
+                if(pair.getIdeal().getData(i) == 1)idealProperIndex = i;
                 idealOutputs.add(pair.getIdeal().getData(i));
             }
+
+            if(actualProperIndex == idealProperIndex)proper++;
+            else bad++;
+            
             arrhythmiaDataList.add(new OutputArrhythmiaData(actualOutputs, idealOutputs, j++));
         }
     }
