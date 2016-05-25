@@ -30,7 +30,7 @@ import Logic.SupervisedLearning;
 
 /**
  * 
- * @author Dominika B³asiak
+ * @author Dominika BÅ‚asiak
  *
  */
 public class LearningPanel extends JPanel {
@@ -95,7 +95,7 @@ public class LearningPanel extends JPanel {
 			neuronText.setText("");
 
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(null, "Podano niepoprawn¹ liczbê neuronów");
+			JOptionPane.showMessageDialog(null, "Podano niepoprawnÄ… liczbï¿½ neuronï¿½w");
 		}
 
 	}
@@ -121,31 +121,31 @@ public class LearningPanel extends JPanel {
 		springLayout = new SpringLayout();
 		this.setLayout(springLayout);
 
-		labelConfiguration = new JLabel("Dane dotycz¹ce sieci: ");
+		labelConfiguration = new JLabel("Dane dotyczÄ…ce sieci: ");
 		SetTopLabel();
 		this.add(labelConfiguration);
 
-		inputDataFileButton = new JButton("Plik z danymi wejœci.");
+		inputDataFileButton = new JButton("Plik z danymi wejï¿½ci.");
 		SetButton(inputDataFileButton, labelConfiguration);
 
-		labelInputData = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domyœlnie zostanie za³adowany plik  "
+		labelInputData = new JLabel("Nie wybrano pliku z danymi do odpytywania. DomyÅ›lnie zostanie zaÅ‚adowany plik  "
 				+ DataManagement.inputFilePath);
 		SetPathLabel(labelInputData, inputDataFileButton, 0);
 
 		networkFileButton = new JButton("Plik do zapisu sieci");
 		SetButton(networkFileButton, inputDataFileButton);
 
-		labelNetwork = new JLabel("Nie wybrano pliku, gdzie zostanie zapisana sieæ. Domyœlnie bêdzie to plik "
+		labelNetwork = new JLabel("Nie wybrano pliku, gdzie zostanie zapisana sieÄ‡. DomyÅ›lnie bÄ™dzie to plik "
 				+ DataManagement.networkFilePath);
 		SetPathLabel(labelNetwork, networkFileButton, 0);
 
-		addHiddenLayerButton = new JButton("Dodaj ukryt¹ warstwê");
+		addHiddenLayerButton = new JButton("Dodaj ukrytÄ… warstwÄ™");
 		SetButton(addHiddenLayerButton, networkFileButton);
 
 		neuronText = new JTextField();
 		SetFieldText(neuronText, addHiddenLayerButton);
 
-		labelIteration = new JLabel("Wpisz liczbê iteracji:", JLabel.CENTER);
+		labelIteration = new JLabel("Wpisz liczbÄ™ iteracji:", JLabel.CENTER);
 		SetButton(labelIteration, addHiddenLayerButton);
 
 		iterationText = new JTextField();
@@ -162,7 +162,7 @@ public class LearningPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, progressBar, -30, SpringLayout.EAST, this);
 		this.add(progressBar);
 
-		labelAddHiddenLayer = new JLabel("Wpisz iloœæ neuronów do pola i kliknij przycisk dodaj ukryt¹ warstwê");
+		labelAddHiddenLayer = new JLabel("Wpisz iloÅ›Ä‡ neuronÃ³w do pola i kliknij przycisk dodaj ukrytÄ… warstwÄ™");
 		SetPathLabel(labelAddHiddenLayer, addHiddenLayerButton, 150);
 
 		InitilizeHiddenLayerList();
@@ -204,24 +204,25 @@ public class LearningPanel extends JPanel {
 					for(int i =0 ; i<dflmHiddenLayerList.size();i++){
 						tab[0] = dflmHiddenLayerList.getElementAt(i).intValue();
 					}
-					learning.customizeHiddenLayers(tab);
+					if(tab.length> 0)learning.customizeHiddenLayers(tab);
 					startLearningButton.setEnabled(false);
 					learning.run(learningPanel);
+
 				} catch (NumberFormatException ex) {
-					JOptionPane.showMessageDialog(null, "Podano niepoprawn¹ liczbê iteracji");
+					JOptionPane.showMessageDialog(null, "Podano niepoprawnÄ… liczbÄ™ iteracji");
 				}
 			}
 		});
 	}
 
 	void ChangePath(JLabel label, String path) {
-		fileDialog = new FileDialog(mainFrame, "Wybierz zbiór danych do odpytywania", FileDialog.LOAD);
+		fileDialog = new FileDialog(mainFrame, "Wybierz zbiÃ³r danych do odpytywania", FileDialog.LOAD);
 		fileDialog.setVisible(true);
 		file = new File(fileDialog.getDirectory() + fileDialog.getFile());
 		if (file.exists() && file.getPath().substring(file.getPath().lastIndexOf(".") + 1).equals("txt")) {
 			label.setText(path = file.getAbsolutePath());
 		} else
-			JOptionPane.showMessageDialog(null, "Wybrano niepoprawn¹ œcie¿kê");
+			JOptionPane.showMessageDialog(null, "Wybrano niepoprawnÄ… Å›cieÅ¼kÄ™");
 	}
 	private int epoch;
 	public void RefreshProgressBar(final int epoch) {
@@ -238,5 +239,10 @@ public class LearningPanel extends JPanel {
 	}
 	public void EnabledButton(){
 		startLearningButton.setEnabled(true);
+	}
+
+	public void finishLearning(){
+		DataManagement dm = new DataManagement();
+		dm.saveNeuralNetwork(labelNetwork.getText(), learning.getNetwork());
 	}
 }

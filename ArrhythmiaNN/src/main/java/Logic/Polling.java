@@ -20,10 +20,10 @@ public class Polling {
 
     public ArrayList<OutputArrhythmiaData> arrhythmiaDataList;
 
-    public void run(){
+    public void run(String filePath){
         arrhythmiaDataList = new ArrayList<OutputArrhythmiaData>();
         DataManagement dm  = new DataManagement();
-        BasicNetwork network = dm.loadNeuralNetwork(DataManagement.networkFilePath);
+        BasicNetwork network = dm.loadNeuralNetwork(filePath);
         // Loads prepared data set from given file.
         // VersatileMLDataSet dataSet = dm.getDataSource("data.txt");
         BasicMLDataSet pollingDataSet = dm.getBasicMLDataSet(DataManagement.pollingFilePath);

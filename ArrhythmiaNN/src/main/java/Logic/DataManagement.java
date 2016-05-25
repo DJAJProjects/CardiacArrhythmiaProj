@@ -148,7 +148,7 @@ public class DataManagement {
 
             //Defining output columns
             if(i >= firstOutputIndex){
-                ColumnDefinition outputColumn = dataSet.defineSourceColumn("arhythmia type", i, ColumnType.continuous);
+                ColumnDefinition outputColumn = dataSet.defineSourceColumn("arrhythmia type", i, ColumnType.continuous);
                 dataSet.defineOutput(outputColumn);
             }
             //Defining linear column

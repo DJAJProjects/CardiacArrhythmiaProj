@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 /**
  * 
- * @author Dominika B�asiak
+ * @author Dominika Błasiak
  *
  */
 public class MainFrame extends JFrame{
@@ -41,7 +41,7 @@ public class MainFrame extends JFrame{
         setName("Typ arytmii");
         this.polling= polling;
         this.learning = sl;
-        setTitle("Rozpoznawanie typ�w arytmii serca");
+        setTitle("Rozpoznawanie typów arytmii serca");
         setMinimumSize(new Dimension(600, 300));
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

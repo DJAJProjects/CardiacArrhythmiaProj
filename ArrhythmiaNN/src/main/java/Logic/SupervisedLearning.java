@@ -31,19 +31,24 @@ public class SupervisedLearning {
     public SupervisedLearning(){
         // Default layers settings
         network = new BasicNetwork();
-        network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
-        network.addLayer(new BasicLayer(new ActivationLOG(), true,400));
-        network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
-        epochsCount = 3000;
+        network.addLayer(new BasicLayer(new ActivationTANH(),true,279));
+        network.addLayer(new BasicLayer(new ActivationTANH(),true,75));
+        network.addLayer(new BasicLayer(new ActivationSoftMax(),true,9));
+        epochsCount = 20000;
     }
 
     private BasicNetwork network;
 
     private int epochsCount;
 
+    public BasicNetwork getNetwork(){return network;
+    }
+
     public void setEpochsCount(int value){epochsCount = value;}
 
     public void customizeHiddenLayers(int[] layers){
+        network = new BasicNetwork();
+
         network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
 
         for(int  i =0; i < layers.length; i++){
@@ -53,19 +58,13 @@ public class SupervisedLearning {
         network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
     }
 
-    public BasicNetwork run(final LearningPanel learningPanel){
+    public void run(final LearningPanel learningPanel){
 
         DataManagement dm  = new DataManagement();
 
         // Loads prepared data set from given file.
         // VersatileMLDataSet dataSet = dm.getDataSource("data.txt");
         BasicMLDataSet dataSet = dm.getBasicMLDataSet(DataManagement.inputFilePath);
-
-        network = new BasicNetwork();
-        network.addLayer(new BasicLayer(new ActivationLOG(),true,279));
-        network.addLayer(new BasicLayer(new ActivationLOG(),true,400));
-        network.addLayer(new BasicLayer(new ActivationLOG(),false,9));
-        
 
         network.getStructure().finalizeStructure();
         network.reset();
@@ -77,7 +76,7 @@ public class SupervisedLearning {
         new Thread(new Runnable() {
 			
 			public void run() {
-				 int epoch = 1;
+                int epoch = 1;
 				do {
 		            train.iteration();
 		            if(epoch%10 == 0){
@@ -87,14 +86,16 @@ public class SupervisedLearning {
 		                epoch++;
 		           
 		        } while((epoch <= epochsCount));
+
 				learningPanel.EnabledButton();
+
+                train.finishTraining();
+
+                learningPanel.finishLearning();
+
 			}
 		}).start();
-        
 
-        train.finishTraining();
-
-        return network;
 
     }
 

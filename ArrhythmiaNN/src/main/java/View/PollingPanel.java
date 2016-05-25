@@ -25,7 +25,7 @@ import Logic.Polling;
 
 /**
  * 
- * @author Dominika B³asiak
+ * @author Dominika B?asiak
  *
  */
 public class PollingPanel extends JPanel {
@@ -141,17 +141,17 @@ public class PollingPanel extends JPanel {
 		SetTopLabel();
 		this.add(labelChoose);
 
-		networkFileButton = new JButton("Sieæ");
+		networkFileButton = new JButton("SieÄ‡");
 		SetButton(networkFileButton, labelChoose);
 
 		labelNetwork = new JLabel(
-				"Nie wybrano pliku z sieci¹. Domyœlnie zostanie za³adowany plik " + DataManagement.pollingFilePath);
+				"Nie wybrano pliku z sieciÄ…. DomyÅ›lnie zostanie za?adowany plik " + DataManagement.pollingFilePath);
 		SetPathLabel(labelNetwork, networkFileButton);
 
 		pollingFileButton = new JButton("Dane do odpytywania");
 		SetButton(pollingFileButton, networkFileButton);
 
-		labelPolling = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domyœlnie zostanie za³adowany plik "
+		labelPolling = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domy?lnie zostanie zaÅ‚adowany plik "
 				+ DataManagement.networkFilePath);
 		SetPathLabel(labelPolling, pollingFileButton);
 
@@ -159,7 +159,7 @@ public class PollingPanel extends JPanel {
 		SetButton(resultFileButton, pollingFileButton);
 
 		labelResultFile = new JLabel(
-				"Nie wybrano pliku, gdzie zostan¹ zapisane dane wynikowe. Domyœlnie bêdzie to plik result.txt");
+				"Nie wybrano pliku, gdzie zostanÄ… zapisane dane wynikowe. DomyÅ›lnie bÄ™dzie to plik result.txt");
 		SetPathLabel(labelResultFile, resultFileButton);
 
 		startPollingButton = new JButton("Rozpocznij odpytywanie");
@@ -196,7 +196,7 @@ public class PollingPanel extends JPanel {
 		});
 		startPollingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				polling.run();
+				polling.run(labelNetwork.getText());
 				SetOutputDataList();
 			}
 		});
@@ -211,12 +211,12 @@ public class PollingPanel extends JPanel {
 	}
 
 	void ChangePath(JLabel label, String path) {
-		fileDialog = new FileDialog(mainFrame, "Wybierz zbiór danych do odpytywania", FileDialog.LOAD);
+		fileDialog = new FileDialog(mainFrame, "Wybierz zbiÃ³r danych do odpytywania", FileDialog.LOAD);
 		fileDialog.setVisible(true);
 		file = new File(fileDialog.getDirectory() + fileDialog.getFile());
 		if (file.exists() && file.getPath().substring(file.getPath().lastIndexOf(".") + 1).equals("txt")) {
 			label.setText(path = file.getAbsolutePath());
 		} else
-			JOptionPane.showMessageDialog(null, "Wybrano niepoprawn¹ œcie¿kê");
+			JOptionPane.showMessageDialog(null, "Wybrano niepoprawnÄ… ?cie?k?");
 	}
 }
