@@ -3,6 +3,9 @@ package Logic;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Dominika Błasiak
+ */
 public class OutputArrhythmiaData {
 	public ArrayList<Double> actualOutput;
 	public ArrayList<Double> idealOutput;

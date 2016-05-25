@@ -105,6 +105,7 @@ public class DataManagement {
 
     public BasicNetwork loadNeuralNetwork(String filePath){
         File file  = new File(filePath);
+        System.out.println("ścieżka: " +filePath);
         if(file == null) return null;
         return (BasicNetwork)EncogDirectoryPersistence.loadObject(file);
     }
@@ -114,9 +115,7 @@ public class DataManagement {
      * Loads data from file with given path, processes it and returns as VersatileMLDataSet.
      */
     public BasicMLDataSet getBasicMLDataSet(String path){
-
-        String newFilePath = "newData.txt";
-
+System.out.print("Joł" + path);
         File file = null;
 
         file  = new File(path);

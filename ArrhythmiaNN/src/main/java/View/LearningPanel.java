@@ -35,7 +35,7 @@ import Logic.SupervisedLearning;
  */
 public class LearningPanel extends JPanel {
 	private JButton startLearningButton, addHiddenLayerButton, networkFileButton, inputDataFileButton;
-	private JLabel labelConfiguration, labelHiddenLayer;
+	private JLabel labelConfiguration, labelHiddenLayer, lblIterator, lblError;
 	private JLabel labelNetwork, labelInputData, labelAddHiddenLayer, labelIteration;
 	private SpringLayout springLayout;
 	private JProgressBar progressBar;
@@ -64,7 +64,7 @@ public class LearningPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, labelConfiguration, 200, SpringLayout.WEST, this);
 	}
 
-	private void SetPathLabel(JComponent component, JButton button, int offset) {
+	private void SetPathLabel(JComponent component, JComponent button, int offset) {
 		springLayout.putConstraint(SpringLayout.NORTH, component, 0, SpringLayout.NORTH, button);
 		springLayout.putConstraint(SpringLayout.SOUTH, component, 0, SpringLayout.SOUTH, button);
 		springLayout.putConstraint(SpringLayout.WEST, component, 40 + offset, SpringLayout.EAST, button);
@@ -125,7 +125,7 @@ public class LearningPanel extends JPanel {
 		SetTopLabel();
 		this.add(labelConfiguration);
 
-		inputDataFileButton = new JButton("Plik z danymi wej�ci.");
+		inputDataFileButton = new JButton("Plik z danymi wejści.");
 		SetButton(inputDataFileButton, labelConfiguration);
 
 		labelInputData = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domyślnie zostanie załadowany plik  "
@@ -155,6 +155,9 @@ public class LearningPanel extends JPanel {
 		startLearningButton = new JButton("Rozpocznij odpytywanie");
 		SetButton(startLearningButton, labelIteration);
 
+//		lblIterator = new JLabel("Iteracja: ");
+//		SetPathLabel(lblIterator,hiddenLayerList,0);
+//		lblError = new JLabel("Błąd: ");
 		progressBar = new JProgressBar();
 		springLayout.putConstraint(SpringLayout.NORTH, progressBar, -80, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, progressBar, -30, SpringLayout.SOUTH, this);

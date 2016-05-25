@@ -25,7 +25,7 @@ import Logic.Polling;
 
 /**
  * 
- * @author Dominika B?asiak
+ * @author Dominika Błasiak
  *
  */
 public class PollingPanel extends JPanel {
@@ -145,14 +145,14 @@ public class PollingPanel extends JPanel {
 		SetButton(networkFileButton, labelChoose);
 
 		labelNetwork = new JLabel(
-				"Nie wybrano pliku z siecią. Domyślnie zostanie za?adowany plik " + DataManagement.pollingFilePath);
+				"Nie wybrano pliku z siecią. Domyślnie zostanie załadowany plik " + DataManagement.networkFilePath);
 		SetPathLabel(labelNetwork, networkFileButton);
 
 		pollingFileButton = new JButton("Dane do odpytywania");
 		SetButton(pollingFileButton, networkFileButton);
 
-		labelPolling = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domy?lnie zostanie załadowany plik "
-				+ DataManagement.networkFilePath);
+		labelPolling = new JLabel("Nie wybrano pliku z danymi do odpytywania. Domyślnie zostanie załadowany plik "
+				+ DataManagement.pollingFilePath);
 		SetPathLabel(labelPolling, pollingFileButton);
 
 		resultFileButton = new JButton("Plik wynikowy");
@@ -179,24 +179,24 @@ public class PollingPanel extends JPanel {
 		SetOutputLabel(labelIdealOutput,scrollIdealOutputList);
 		networkFileButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelNetwork, DataManagement.networkFilePath);
+				DataManagement.networkFilePath = ChangePath(labelNetwork, DataManagement.networkFilePath);
 			}
 		});
 		pollingFileButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelPolling, DataManagement.pollingFilePath);
+				DataManagement.pollingFilePath = ChangePath(labelPolling, DataManagement.pollingFilePath);
 			}
 		});
 		resultFileButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ChangePath(labelResultFile, resultPath);
+				resultPath = ChangePath(labelResultFile, resultPath);
 
 			}
 		});
 		startPollingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				polling.run(labelNetwork.getText());
+				polling.run();
 				SetOutputDataList();
 			}
 		});
@@ -210,13 +210,15 @@ public class PollingPanel extends JPanel {
 		});
 	}
 
-	void ChangePath(JLabel label, String path) {
+	String ChangePath(JLabel label, String path) {
 		fileDialog = new FileDialog(mainFrame, "Wybierz zbiór danych do odpytywania", FileDialog.LOAD);
 		fileDialog.setVisible(true);
 		file = new File(fileDialog.getDirectory() + fileDialog.getFile());
 		if (file.exists() && file.getPath().substring(file.getPath().lastIndexOf(".") + 1).equals("txt")) {
 			label.setText(path = file.getAbsolutePath());
+			System.out.println(path);
 		} else
-			JOptionPane.showMessageDialog(null, "Wybrano niepoprawną ?cie?k?");
+			JOptionPane.showMessageDialog(null, "Wybrano niepoprawną ścieżkę");
+		return path;
 	}
 }

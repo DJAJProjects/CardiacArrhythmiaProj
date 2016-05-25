@@ -53,14 +53,7 @@ public class MainFrame extends JFrame{
         AddPollingPanel();
         AddLearningPanel();
         getContentPane().add(tabbedPane);
-                       
-///
-//        btnStart.addActionListener(new ActionListener() {
-//			
-//			public void actionPerformed(ActionEvent e) {
-//                sl.run(path);
-//			}
-//		});
+
         pack();
         setVisible(true);
     }
