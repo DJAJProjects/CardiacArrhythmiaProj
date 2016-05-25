@@ -27,6 +27,16 @@ public class DataManagement {
     public static String networkFilePath = "network2.txt";
     public static String inputFilePath = "learningData.txt";
     public static String resultFilePath = "result.txt";
+    public static String[] outputNames= {"Wyniki w normie",
+                                        "Wykryta arytmia, choroba niedokrwienna serca",
+                                        "Wykryta arytmia, zawał mięśnia sercowego (Old Anterior Myocardial Infarction)",
+                                        "Wykryta arytmia, zawał mięśnia sercowego (Old Inferior Myocardial Infarction)",
+                                        "Wykryta arytmia, tachykardia sinusoidalna",
+                                        "Wykryta arytmia, bradykardia sinusoidalna ",
+                                        "Wykryta arytmia, blok lewej odnogi pęczka Hisa",
+                                        "Wykryta arytmia, blok prawej odnogi pęczka Hisa ",
+                                        "Wykryta arytmia, inna grupa"};
+
     private double[][] input;
     private double[][] output;
 
